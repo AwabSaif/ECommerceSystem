@@ -5,10 +5,8 @@ using Modules.Catalog.Features.Products.Create;
 
 namespace ECommerce.API.Controllers;
 
-[ApiController]
-[Route("api/catalog/[controller]")]
-[Authorize]
-public class ProductsController : ControllerBase
+// [Authorize]
+public class ProductsController : CatalogBaseController
 {
     private readonly IMediator _mediator;
 
@@ -21,11 +19,11 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
     {
     
-        var result = await _mediator.Send(command);
+        var response = await _mediator.Send(command);
 
-        if (result.IsSuccess) 
-            return Ok(new { ProductId = result.Data });
+        if (response.IsSuccess) 
+            return Ok(response);
 
-        return BadRequest(new { Error = result.ErrorMessage });
+        return BadRequest(response);
     }
 }

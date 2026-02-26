@@ -10,6 +10,7 @@ public class CatalogDbContext : DbContext
     }
 
     public DbSet<Product> Products { get; set; }
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,5 +18,6 @@ public class CatalogDbContext : DbContext
         
         
         modelBuilder.Entity<Product>().ToTable("Catalog_Products");
+        modelBuilder.Entity<Category>().ToTable("Catalog_Categories");
     }
 }
