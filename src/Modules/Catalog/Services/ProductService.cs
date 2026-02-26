@@ -1,28 +1,26 @@
-using MediatR;
-using Modules.Catalog.Data;
-using Modules.Catalog.Entities;
-using Modules.Catalog.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Modules.Catalog.Data;
+using Modules.Catalog.DTOs;
+using Modules.Catalog.Entities;
 using SharedKernal.Models;
 
-namespace Modules.Catalog.Features.Products.Create;
+namespace Modules.Catalog.Services;
 
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, SystemResponse<ProductDto>>
+public class ProductService
 {
     private readonly CatalogDbContext _context;
 
-    public CreateProductCommandHandler(CatalogDbContext context)
+    public ProductService(CatalogDbContext context)
     {
         _context = context;
     }
 
-    public async Task<SystemResponse<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
+    public async Task<SystemResponse<ProductDto>> CreateProductAsync(CreateProductRequest request)
     {
-      
-        var categoryExists = await _context.Categories.AnyAsync(c => c.Id == request.CategoryId, cancellationToken);
+        var categoryExists = await _context.Categories.AnyAsync(c => c.Id == request.CategoryId);
         if (!categoryExists)
         {
-            return new SystemResponse<ProductDto> { IsSuccess = false, Message = "The specified category does not exist." };
+            return new SystemResponse<ProductDto> { IsSuccess = false, Message = "القسم المحدد غير موجود." };
         }
 
         var product = new Product
@@ -43,9 +41,8 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         };
 
         _context.Products.Add(product);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
 
-       
         var productDto = new ProductDto(
             product.Id, product.Name, product.Description, product.SKU, 
             product.Price, product.StockQuantity, product.ImageUrl, product.IsActive, product.CategoryId

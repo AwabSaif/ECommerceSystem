@@ -44,10 +44,9 @@ builder.Services.AddOpenIddict()
 builder.Services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 builder.Services.AddAuthorization();
 
-// Register MediatR and scan the assembly for handlers (like CreateProductCommandHandler) --- IGNORE ---
-builder.Services.AddMediatR(cfg => {
-    cfg.RegisterServicesFromAssembly(typeof(Modules.Catalog.Data.CatalogDbContext).Assembly);
-});
+
+builder.Services.AddScoped<Modules.Catalog.Services.CategoryService>();
+builder.Services.AddScoped<Modules.Catalog.Services.ProductService>();
 
 var app = builder.Build();
 

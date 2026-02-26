@@ -1,29 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using MediatR;
-using Modules.Catalog.Features.Products.Create;
+
+using Modules.Catalog.Services;
+using Modules.Catalog.DTOs;
 
 namespace ECommerce.API.Controllers;
 
 // [Authorize]
 public class ProductsController : CatalogBaseController
 {
-    private readonly IMediator _mediator;
+    private readonly ProductService _productService;
 
-    public ProductsController(IMediator mediator)
+    public ProductsController(ProductService productService)
     {
-        _mediator = mediator;
+        _productService = productService;
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
+    public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest request)
     {
     
-        var response = await _mediator.Send(command);
+        var response = await _productService.CreateProductAsync(request);
 
-        if (response.IsSuccess) 
-            return Ok(response);
-
+        if (response.IsSuccess) return Ok(response);
         return BadRequest(response);
     }
 }

@@ -11,7 +11,7 @@ public class SystemResponse<T> : SystemResponse
     public T? ReturnedValue { get; set; }
 }
 
-public class SystemResponseList<T> : SystemResponse
+public class SystemResponseList<T> : SystemResponse<T> 
 {
     public int TotalCount { get; set; }
 }
