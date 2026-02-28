@@ -1,0 +1,15 @@
+@using Microsoft.AspNetCore.Identity
+@using Auth.Server.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@if (SignInManager.IsSignedIn(User))
+{
+    <span class="navbar-text">Hello @User.Identity?.Name!</span>
+    <form asp-controller="Authorization" asp-action="Logout" asp-area="" method="post" class="d-inline">
+        <button type="submit" class="btn btn-link navbar-btn">Log out</button>
+    </form>
+}
+else
+{
+    <a class="nav-link" asp-area="Identity" asp-page="/Account/Login">Log in</a>
+}
